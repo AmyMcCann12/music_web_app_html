@@ -2,44 +2,72 @@ from playwright.sync_api import Page, expect
 
 # Tests for your routes go here
 
-def test_get_albums(page, test_web_address, db_connection):
+def test_get_albums_paragraphs(page, test_web_address, db_connection):
     db_connection.seed('seeds/music_library.sql')
     page.goto(f"http://{test_web_address}/albums")
+    h2_tags = page.locator("h2")
+    expect(h2_tags).to_have_text([
+        "Doolittle",
+        "Surfer Rosa",
+        "Waterloo",
+        "Super Trouper",
+        "Bossanova",
+        "Lover",
+        "Folklore",
+        "I Put a Spell on You",
+        "Baltimore",
+        "Here Comes the Sun",
+        "Fodder on My Wings",
+        "Ring Ring"
+    ])
     paragraph_tags = page.locator("p")
     expect(paragraph_tags).to_have_text([
-        "Title: Doolittle",
         "Released: 1989",
-        "Title: Surfer Rosa",
         "Released: 1988", 
-        "Title: Waterloo",
         "Released: 1974",
-        "Title: Super Trouper",
         "Released: 1980",
-        "Title: Bossanova",
         "Released: 1990",
-        "Title: Lover",
         "Released: 2019",
-        "Title: Folklore",
         "Released: 2020",
-        "Title: I Put a Spell on You",
         "Released: 1965",
-        "Title: Baltimore",
         "Released: 1978",
-        "Title: Here Comes the Sun",
         "Released: 1971",
-        "Title: Fodder on My Wings",
         "Released: 1982",
-        "Title: Ring Ring",
         "Released: 1973"
     ])
 
-def test_get_one_album(page, test_web_address, db_connection):
+def test_get_album_via_link(page, test_web_address, db_connection):
+    db_connection.seed('seeds/music_library.sql')
+    page.goto(f"http://{test_web_address}/albums")
+    page.click("text=Super Trouper")
+
+    album_title_element = page.locator("h1")
+    expect(album_title_element).to_have_text("Album: Super Trouper")
+
+    content = page.locator("p")
+    expect(content).to_have_text([
+        "Release year: 1980",
+        "Artist: ABBA"])
+
+
+def test_get_one_album_2(page, test_web_address, db_connection):
     db_connection.seed('seeds/music_library.sql')
     page.goto(f"http://{test_web_address}/albums/2")
+    release_year_tag = page.locator(".t-release-year")
+    expect(release_year_tag).to_have_text("Release year: 1988")
+    artist_tag = page.locator(".t-artist")
+    expect(artist_tag).to_have_text("Artist: Pixies")
+    heading1_tags = page.locator("h1")
+    expect(heading1_tags).to_have_text("Album: Surfer Rosa")\
+    
+
+def test_get_one_album_4(page, test_web_address, db_connection):
+    db_connection.seed('seeds/music_library.sql')
+    page.goto(f"http://{test_web_address}/albums/4")
     paragraph_tags = page.locator("p")
     expect(paragraph_tags).to_have_text([
-        "Release year: 1988",
-        "Artist: Pixies"
+        "Release year: 1980",
+        "Artist: ABBA"
     ])
     heading1_tags = page.locator("h1")
-    expect(heading1_tags).to_have_text("Surfer Rosa")
+    expect(heading1_tags).to_have_text("Album: Super Trouper")
