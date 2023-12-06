@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+  <head lang="en">
+    <title>Artists List</title>
+  </head>
+  <body>
+    <h1>Artists</h1>
+    {% for artist in artists %}
+    <div>
+        <h2>
+          <a href="/artists/{{artist.id}}">{{artist.name}}</a>
+        </h2>
+    </div>
+    {% endfor %}
+  </body>
+</html>

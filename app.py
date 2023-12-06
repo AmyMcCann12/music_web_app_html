@@ -25,8 +25,23 @@ def get_single_album(id):
     # artist_name = artist_repository.find(album.artist_id).name
     return render_template('albums/album.html', album=album)
 
+@app.route('/artists/<id>')
+def get_single_arist(id):
+    connection = get_flask_database_connection(app)
+    repository = ArtistRepository(connection)
+    artist = repository.find_with_albums(id)
+    return render_template('artists/artist.html', artist = artist)
+
+@app.route('/artists')
+def get_artists():
+    connection = get_flask_database_connection(app)
+    repository = ArtistRepository(connection)
+    artists = repository.all()
+    return render_template('artists/index.html', artists = artists)
+
 # These lines start the server if you run this file directly
 # They also start the server configured to use the test database
 # if started in test mode.
 if __name__ == '__main__':
     app.run(debug=True, port=int(os.environ.get('PORT', 5001)))
+

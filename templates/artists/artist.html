@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+  <head>
+    <title>Artist</title>
+  </head>
+  <body>
+    <h1>Artist: {{artist.name}}</h1>
+    <p class="t-genre">Genre: {{artist.genre}}</p>
+    <p>Albums: </p>
+        {% for album in artist.albums %}
+    <p>{{album.title}}</p>
+    {% endfor %}
+    
+    
+  </body>
+</html>
