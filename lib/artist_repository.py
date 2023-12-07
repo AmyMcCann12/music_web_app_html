@@ -24,25 +24,32 @@ class ArtistRepository:
         return Artist(row["id"], row["name"], row["genre"])
 
     def find_with_albums(self, artist_id):
-        rows = self.connection.execute(
-            'SELECT * FROM artists JOIN albums ON artists.id = albums.artist_id WHERE artists.id = %s',
-            [artist_id]
-        )
         albums = []
+        rows = self.connection.execute(
+            """SELECT albums.id AS album_id,
+            albums.title, albums.release_year, albums.artist_id,
+            artists.id,
+            artists.name,
+            artists.genre
+            FROM artists 
+            JOIN albums 
+            ON albums.artist_id = artists.id 
+            WHERE artists.id = %s""",
+            [artist_id])
+        print(rows)
         for row in rows:
-            album = Album(row['id'], row['title'], row['release_year'], row['artist_id'])
+            album = Album(row['album_id'], row['title'], row['release_year'], row['artist_id'])
             albums.append(album)
-        artist = Artist(rows[0]['artist_id'], rows[0]['name'], rows[0]['genre'], albums)
-        print(artist)
+        rows = self.connection.execute('SELECT * FROM artists WHERE id = %s', [artist_id]) 
+        artist = Artist(rows[0]['id'], rows[0]['name'], rows[0]['genre'], albums)
         return artist
     
-    # Create a new artist
-    # Do you want to get its id back? Look into RETURNING id;
     def create(self, artist):
-        self.connection.execute('INSERT INTO artists (name, genre) VALUES (%s, %s)', [artist.name, artist.genre])
+        rows = self.connection.execute('INSERT INTO artists (name, genre) VALUES (%s, %s) RETURNING id', [artist.name, artist.genre])
+        row = rows[0]
+        artist.id = row["id"]
         return None
 
-    # Delete an artist by their id
     def delete(self, artist_id):
         self.connection.execute(
             'DELETE FROM artists WHERE id = %s', [artist_id])

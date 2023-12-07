@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+  <head lang="en">
+    <title>Add New Artist</title>
+  </head>
+  <body>
+    <h1>Add New Artist</h1>
+    {% if errors %}
+        <p class="t-errors">
+            There were errors with your submission: {{errors}}
+        </p>
+        {% endif%}
+    <form action="/artists" method="post">
+    <p>
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name">
+    </p>
+    <p>
+        <label for="genre">Genre</label>
+        <input type="text" name="genre" id="genre">
+    </p>
+    <input type="submit" value="Create Artist">
+</form>
+  </body>
+</html>

@@ -6,10 +6,11 @@
     <h1>Artist: {{artist.name}}</h1>
     <p class="t-genre">Genre: {{artist.genre}}</p>
     <p>Albums: </p>
+    <ul>
         {% for album in artist.albums %}
-    <p>{{album.title}}</p>
-    {% endfor %}
-    
-    
+        <li>{{album.title}}</li>
+        {% endfor %}
+    </ul>    
+    <a href="/artists">Return to Artists</a>
   </body>
 </html>

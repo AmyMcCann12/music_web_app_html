@@ -19,7 +19,9 @@ class AlbumRepository():
         return album
     
     def create(self, album):
-        self.connection.execute('INSERT INTO albums (title, release_year, artist_id) VALUES (%s, %s, %s)', [album.title, album.release_year, album.artist_id])
+        rows = self.connection.execute('INSERT INTO albums (title, release_year, artist_id) VALUES (%s, %s, %s) RETURNING id', [album.title, album.release_year, album.artist_id])
+        row = rows[0]
+        album.id = row["id"]
         return None
     
     def delete(self, album_id):

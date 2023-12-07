@@ -74,9 +74,15 @@ Then I get the artist with a list of their albums, populated
 def test_find_with_albums(db_connection):
     db_connection.seed('seeds/music_library.sql')
     repository = ArtistRepository(db_connection)
-    result = repository.find_with_albums(1)
-    assert result == Artist(1,'Pixies', 'Rock', [
-        Album(1, 'Doolittle', 1989, 1),
-        Album(2, 'Surfer Rosa', 1988, 1),
-        Album(5, 'Bossanova', 1990, 1)
+    result = repository.find_with_albums(3)
+    assert result == Artist(3,'Taylor Swift', 'Pop', [
+        Album(6, 'Lover', 2019, 3),
+        Album(7, 'Folklore', 2020, 3),
     ])
+
+def test_find_with_albums_with_no_albums(db_connection):
+    db_connection.seed('seeds/music_library.sql')
+    repository = ArtistRepository(db_connection)
+    repository.create(Artist(None, "The Beatles", "Rock"))
+    result = repository.find_with_albums(5)
+    assert result == Artist(5,"The Beatles", "Rock",[])

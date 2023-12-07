@@ -46,9 +46,10 @@ We get a new record in the database
 def test_create_record(db_connection):
     db_connection.seed("seeds/music_library.sql")
     repository = AlbumRepository(db_connection)
-
-    repository.create(Album(None, "Album Title1", 2023, 3))
+    album = Album(None, "Album Title1", 2023, 3)
+    repository.create(album)
     result = repository.all()
+    assert album.id == 13
     assert result == [
         Album(1, 'Doolittle', 1989,1), 
         Album(2, 'Surfer Rosa', 1988, 1),
@@ -94,7 +95,6 @@ def test_delete_record(db_connection):
 """ 
 Find album with artist
 """
-
 def test_find_album_with_artist(db_connection):
     db_connection.seed("seeds/music_library.sql")
     repository = AlbumRepository(db_connection)
