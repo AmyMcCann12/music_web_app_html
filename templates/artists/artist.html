@@ -10,7 +10,11 @@
         {% for album in artist.albums %}
         <li>{{album.title}}</li>
         {% endfor %}
-    </ul>    
+    </ul>
     <a href="/artists">Return to Artists</a>
+    <br> <br> 
+    <form action="/artists/{{artist.id}}/delete" method="post">
+      <input type="submit" value="Delete Artist">
+    </form>
   </body>
 </html>

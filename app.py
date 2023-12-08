@@ -89,7 +89,7 @@ def create_artist():
     repository.create(new_artist)
     return redirect(f"/artists/{new_artist.id}")
 
-@app.route('/artists/delete/<int:id>',  methods = ['GET'])
+@app.route('/artists/<int:id>/delete',  methods = ['POST'])
 def delete_artist(id):
     connection = get_flask_database_connection(app)
     repository = ArtistRepository(connection)

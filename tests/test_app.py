@@ -204,3 +204,15 @@ def test_create_artist_error(db_connection, page, test_web_address):
     page.click('text=Create Artist')
     errors = page.locator('.t-errors')
     expect(errors).to_have_text("There were errors with your submission: Name can't be blank, Genre can't be blank")
+
+"""
+Delete artist removes artist from the database
+"""
+
+def test_delete_artist(db_connection, page, test_web_address):
+    db_connection.seed('seeds/music_library.sql')
+    page.goto(f"http://{test_web_address}/artists")
+    page.click('text=Pixies')
+    page.click('text=Delete Artist')
+    h2_tags = page.locator("h2")
+    expect(h2_tags).to_have_text(["ABBA", "Taylor Swift", "Nina Simone"])
